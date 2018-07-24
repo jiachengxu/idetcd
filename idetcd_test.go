@@ -11,11 +11,12 @@ import (
 	"github.com/coredns/coredns/plugin/proxy"
 	"github.com/coredns/coredns/plugin/test"
 	"github.com/coredns/coredns/request"
+	"github.com/jiachengxu/idetcd"
 	"github.com/mholt/caddy"
 	"github.com/miekg/dns"
 )
 
-var localIP = getLocalIPAddress().String()
+var localIP = iP()
 
 func TestBasicLookupNodesRR(t *testing.T) {
 	corefiles := generateCorefiles(5)
@@ -36,19 +37,7 @@ func TestBasicLookupNodesRR(t *testing.T) {
 	state := request.Request{W: &test.ResponseWriter{}, Req: new(dns.Msg)}
 
 	for i := range corefiles {
-		resp, err := p.Lookup(state, "worker"+strconv.Itoa(i+1)+".tf.local.", dns.TypeA)
-		if err != nil {
-			t.Fatalf("Expected to receive reply, but didn't: %v", err)
-		}
-		if len(resp.Answer) == 0 {
-			t.Fatalf("Expected to at least one RR in the answer section, got none")
-		}
-		if resp.Answer[0].Header().Rrtype != dns.TypeA {
-			t.Errorf("Expected RR to A, got: %d", resp.Answer[0].Header().Rrtype)
-		}
-		if resp.Answer[0].(*dns.A).A.String() != localIP {
-			t.Errorf("Expected %s , got: %s", localIP, resp.Answer[0].(*dns.A).A.String())
-		}
+		checkAnswer(i, state, p, t)
 	}
 	time.Sleep(10 * time.Second)
 	for _, node := range nodes {
@@ -76,19 +65,7 @@ func TestNodeUpAfterTTL(t *testing.T) {
 	state := request.Request{W: &test.ResponseWriter{}, Req: new(dns.Msg)}
 
 	for i := range corefiles[:4] {
-		resp, err := p.Lookup(state, "worker"+strconv.Itoa(i+1)+".tf.local.", dns.TypeA)
-		if err != nil {
-			t.Fatalf("Expected to receive reply, but didn't: %v", err)
-		}
-		if len(resp.Answer) == 0 {
-			t.Fatalf("Expected to at least one RR in the answer section, got none")
-		}
-		if resp.Answer[0].Header().Rrtype != dns.TypeA {
-			t.Errorf("Expected RR to A, got: %d", resp.Answer[0].Header().Rrtype)
-		}
-		if resp.Answer[0].(*dns.A).A.String() != localIP {
-			t.Errorf("Expected %s , got: %s", localIP, resp.Answer[0].(*dns.A).A.String())
-		}
+		checkAnswer(i, state, p, t)
 	}
 	////should fail when check the 5th one
 	resp, err := p.Lookup(state, "worker"+strconv.Itoa(5)+".tf.local.", dns.TypeA)
@@ -108,19 +85,7 @@ func TestNodeUpAfterTTL(t *testing.T) {
 	nodes = append(nodes, node5)
 	defer node5.Stop()
 	//check rr of node 5
-	resp, err = p.Lookup(state, "worker"+strconv.Itoa(5)+".tf.local.", dns.TypeA)
-	if err != nil {
-		t.Fatalf("Expected to receive reply, but didn't: %v", err)
-	}
-	if len(resp.Answer) == 0 {
-		t.Fatalf("Expected to at least one RR in the answer section, got none")
-	}
-	if resp.Answer[0].Header().Rrtype != dns.TypeA {
-		t.Errorf("Expected RR to A, got: %d", resp.Answer[0].Header().Rrtype)
-	}
-	if resp.Answer[0].(*dns.A).A.String() != localIP {
-		t.Errorf("Expected %s , got: %s", localIP, resp.Answer[0].(*dns.A).A.String())
-	}
+	checkAnswer(4, state, p, t)
 	for _, node := range nodes {
 		node.ShutdownCallbacks()
 	}
@@ -149,19 +114,7 @@ func TestNodeTakeFreeSlot(t *testing.T) {
 	state := request.Request{W: &test.ResponseWriter{}, Req: new(dns.Msg)}
 
 	for i := range corefiles[:4] {
-		resp, err := p.Lookup(state, "worker"+strconv.Itoa(i+1)+".tf.local.", dns.TypeA)
-		if err != nil {
-			t.Fatalf("Expected to receive reply, but didn't: %v", err)
-		}
-		if len(resp.Answer) == 0 {
-			t.Fatalf("Expected to at least one RR in the answer section, got none")
-		}
-		if resp.Answer[0].Header().Rrtype != dns.TypeA {
-			t.Errorf("Expected RR to A, got: %d", resp.Answer[0].Header().Rrtype)
-		}
-		if resp.Answer[0].(*dns.A).A.String() != localIP {
-			t.Errorf("Expected %s , got: %s", localIP, resp.Answer[0].(*dns.A).A.String())
-		}
+		checkAnswer(i, state, p, t)
 	}
 	time.Sleep(8 * time.Second)
 	//shut down node 2
@@ -186,19 +139,7 @@ func TestNodeTakeFreeSlot(t *testing.T) {
 	nodes = append(nodes, node5)
 	defer node5.Stop()
 	//check rr of node 5
-	resp, err = p.Lookup(state, "worker"+strconv.Itoa(2)+".tf.local.", dns.TypeA)
-	if err != nil {
-		t.Fatalf("Expected to receive reply, but didn't: %v", err)
-	}
-	if len(resp.Answer) == 0 {
-		t.Fatalf("Expected to at least one RR in the answer section, got none")
-	}
-	if resp.Answer[0].Header().Rrtype != dns.TypeA {
-		t.Errorf("Expected RR to A, got: %d", resp.Answer[0].Header().Rrtype)
-	}
-	if resp.Answer[0].(*dns.A).A.String() != localIP {
-		t.Errorf("Expected %s , got: %s", localIP, resp.Answer[0].(*dns.A).A.String())
-	}
+	checkAnswer(2, state, p, t)
 	node2, _, _, err := CoreDNSServerAndPorts(corefiles[shutDownIdx])
 	if err != nil {
 		t.Fatalf("Could not get CoreDNS serving instance: %s,%d", err, shutDownIdx)
@@ -206,7 +147,15 @@ func TestNodeTakeFreeSlot(t *testing.T) {
 	nodes[shutDownIdx] = node2
 	defer node2.Stop()
 	//check rr of node 2
-	resp, err = p.Lookup(state, "worker"+strconv.Itoa(5)+".tf.local.", dns.TypeA)
+	checkAnswer(4, state, p, t)
+	for _, node := range nodes {
+		node.ShutdownCallbacks()
+	}
+	time.Sleep(20 * time.Second)
+}
+
+func checkAnswer(i int, state request.Request, p proxy.Proxy, t *testing.T) {
+	resp, err := p.Lookup(state, "worker"+strconv.Itoa(i+1)+".tf.local.", dns.TypeA)
 	if err != nil {
 		t.Fatalf("Expected to receive reply, but didn't: %v", err)
 	}
@@ -216,14 +165,10 @@ func TestNodeTakeFreeSlot(t *testing.T) {
 	if resp.Answer[0].Header().Rrtype != dns.TypeA {
 		t.Errorf("Expected RR to A, got: %d", resp.Answer[0].Header().Rrtype)
 	}
-	if resp.Answer[0].(*dns.A).A.String() != localIP {
+	if resp.Answer[0].(*dns.A).A.String() != localIP.Ipv4 {
 		t.Errorf("Expected %s , got: %s", localIP, resp.Answer[0].(*dns.A).A.String())
 	}
 
-	for _, node := range nodes {
-		node.ShutdownCallbacks()
-	}
-	time.Sleep(20 * time.Second)
 }
 
 func generateCorefiles(numNode int) []string {
@@ -242,17 +187,28 @@ func generateCorefiles(numNode int) []string {
 	}
 	return corefiles
 }
-func getLocalIPAddress() net.IP {
-	var localIP net.IP
+
+func iP() idetcd.Record {
+	record := new(idetcd.Record)
 	interfaces, _ := net.Interfaces()
+	var flag bool
 	for _, inter := range interfaces {
-		addrs, _ := inter.Addrs()
-		for _, addr := range addrs {
-			localIP = net.ParseIP(strings.Split(addr.String(), "/")[0])
-			if localIP.To4() != nil && !localIP.IsLoopback() {
-				return localIP
+		if inter.Flags&net.FlagLoopback == 0 {
+			flag = false
+			addrs, _ := inter.Addrs()
+			for _, addr := range addrs {
+				localIP := net.ParseIP(strings.Split(addr.String(), "/")[0])
+				if localIP.To4() != nil {
+					record.Ipv4 = localIP.String()
+					flag = true
+				} else if localIP.To16() != nil {
+					record.Ipv6 = localIP.To16().String()
+				}
+			}
+			if flag {
+				break
 			}
 		}
 	}
-	return localIP
+	return *record
 }

@@ -27,8 +27,9 @@ idetcd {
 	idetcd {
 		endpoint http://localhost:2379
 		limit 10
-		pattern worker{{.ID}}.local.tf
+		pattern worker{{.ID}}.local.tf.
 	}
 }
+~~~
 
 Multiple endpoints are supported as well, and pattern should follow a golang template format.
