@@ -1,3 +1,4 @@
+//Copied from coredns/test/ folder and used for integration tests.
 package idetcd
 
 import (
