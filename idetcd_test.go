@@ -1,5 +1,5 @@
 //etcd local instance is needed.
-package test
+package idetcd
 
 import (
 	"net"
