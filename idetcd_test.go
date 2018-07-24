@@ -2,16 +2,13 @@
 package idetcd
 
 import (
-	"net"
 	"strconv"
-	"strings"
 	"testing"
 	"time"
 
 	"github.com/coredns/coredns/plugin/proxy"
 	"github.com/coredns/coredns/plugin/test"
 	"github.com/coredns/coredns/request"
-	"github.com/jiachengxu/idetcd"
 	"github.com/mholt/caddy"
 	"github.com/miekg/dns"
 )
@@ -186,29 +183,4 @@ func generateCorefiles(numNode int) []string {
 		corefiles = append(corefiles, corefile)
 	}
 	return corefiles
-}
-
-func iP() idetcd.Record {
-	record := new(idetcd.Record)
-	interfaces, _ := net.Interfaces()
-	var flag bool
-	for _, inter := range interfaces {
-		if inter.Flags&net.FlagLoopback == 0 {
-			flag = false
-			addrs, _ := inter.Addrs()
-			for _, addr := range addrs {
-				localIP := net.ParseIP(strings.Split(addr.String(), "/")[0])
-				if localIP.To4() != nil {
-					record.Ipv4 = localIP.String()
-					flag = true
-				} else if localIP.To16() != nil {
-					record.Ipv6 = localIP.To16().String()
-				}
-			}
-			if flag {
-				break
-			}
-		}
-	}
-	return *record
 }
