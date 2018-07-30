@@ -11,3 +11,40 @@ In distributed TensorFlow, identifying the nodes without domain name collision i
 
 ## How it works
 ![deploy](https://github.com/jiachengxu/idetcd/blob/master/fig/deploy.png)
+
+## Usage
+You can get this project by:
+```
+$ go get github.com/jiachengxu/idetcd
+```
+
+Then you need to add a Corefile which specifys the configuration of the CoreDNS server in the same directory of `main.go`, an simple Corefile example is as follows, please go to [CoreDNS github repo](https://github.com/coredns/coredns) for more details. And for syntax of idetcd plugin, you can check in the [idetcd folder](https://github.com/jiachengxu/idetcd/tree/master/idetcd#idetcd).
+ ~~~ corefile
+ . {
+     idetcd {
+         endpoint http://localhost:2379
+         limit 10
+         pattern worker{{.ID}}.tf.local.
+     }
+     whoami
+ }
+ ~~~
+
+And then you can generate binary file by:
+```
+$ go build -o coredns
+```
+
+Then run it by:
+```
+$ ./coredns
+```
+
+After that, the node in the cluster is trying to find a free slot in the etcd to expost itself, once it is successed(for example, it takes the worker4.tf.local. domain name), you can get the domain name of this node on every node in the same cluster by:
+```
+$ dig +short worker4.tf.local @localhost
+```
+Also ipv6 is supported:
+```
+$ dig +short worker4.tf.local AAAA @localhost
+```
