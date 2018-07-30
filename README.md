@@ -15,7 +15,7 @@ In distributed TensorFlow, identifying the nodes without domain name collision i
 ## Usage
 You can get this project by:
 ```
-$ go get github.com/jiachengxu/idetcd
+$ go get -u github.com/jiachengxu/idetcd
 ```
 
 Then you need to add a Corefile which specifys the configuration of the CoreDNS server in the same directory of `main.go`, an simple Corefile example is as follows, please go to [CoreDNS github repo](https://github.com/coredns/coredns) for more details. And for syntax of idetcd plugin, you can check in the [idetcd folder](https://github.com/jiachengxu/idetcd/tree/master/idetcd#idetcd).
