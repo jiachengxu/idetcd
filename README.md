@@ -36,7 +36,7 @@ In following example, we have a cluster which contains 5 nodes, on every node we
 ```
 $ go get -u github.com/jiachengxu/idetcd
 ```
-Before you move to the next step, make sure that you already set up a etcd instance, and don't forget to write down the endpoints.
+Before you move to the next step, make sure that you've already set up a etcd instance, and don't forget to write down the endpoints.
 
 Then you need to add a Corefile which specifys the configuration of the CoreDNS server in the same directory of `main.go`, an simple Corefile example is as follows, please go to [CoreDNS github repo](https://github.com/coredns/coredns) for more details.
 
