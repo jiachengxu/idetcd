@@ -31,16 +31,19 @@ idetcd {
 * `limit` **LIMIT** the maximum limit of the node number in the cluster, if some nodes is going to expose itself after the node number in the cluster hits this limit, it will fail.
 * `pattern` **PATTERN** the domain name pattern that every node follows in the cluster. And here we use golang template for the pattern.
 
-You can get this project by:
+### Example
+In following example, we have a cluster which contains 5 nodes, on every node we can get this project by:
 ```
 $ go get -u github.com/jiachengxu/idetcd
 ```
+Before you move to the next step, make sure that you already set up a etcd instance, and don't forget to write down the endpoints.
 
-Then you need to add a Corefile which specifys the configuration of the CoreDNS server in the same directory of `main.go`, an simple Corefile example is as follows, please go to [CoreDNS github repo](https://github.com/coredns/coredns) for more details. And for syntax of idetcd plugin, you can check in the [idetcd folder](https://github.com/jiachengxu/idetcd/tree/master/idetcd#idetcd).
+Then you need to add a Corefile which specifys the configuration of the CoreDNS server in the same directory of `main.go`, an simple Corefile example is as follows, please go to [CoreDNS github repo](https://github.com/coredns/coredns) for more details.
+
  ~~~ corefile
  . {
      idetcd {
-         endpoint http://localhost:2379
+         endpoint ETCDENDPOINTS
          limit 10
          pattern worker{{.ID}}.tf.local.
      }
@@ -58,7 +61,7 @@ Then run it by:
 $ ./coredns
 ```
 
-After that, the node in the cluster is trying to find a free slot in the etcd to expost itself, once it is successed(for example, it takes the worker4.tf.local. domain name), you can get the domain name of this node on every node in the same cluster by:
+After that, all nodes in the cluster are trying to find free slots in the etcd to expose themselves, once they are successed, you can get the domain name of every node on every node in the same cluster by:
 ```
 $ dig +short worker4.tf.local @localhost
 ```
