@@ -68,4 +68,4 @@ $ dig +short worker4.tf.local AAAA @localhost
 ```
 
 Reference
-[1]((https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers)
+[1](https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers)
