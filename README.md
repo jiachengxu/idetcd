@@ -53,7 +53,7 @@ Then you need to add a Corefile which specifys the configuration of the CoreDNS 
 
 And then you can generate binary file by:
 ```
-$ go build -o coredns
+$ go build -v -o coredns
 ```
 
 Then run it by:
@@ -68,6 +68,12 @@ $ dig +short worker4.tf.local @localhost
 Also ipv6 is supported:
 ```
 $ dig +short worker4.tf.local AAAA @localhost
+```
+
+Alternatively, if you have docker installed, you could also execute the following to build:
+```sh
+$ docker run --rm -i -t -v $PWD:/go/src/github.com/jiachengxu/idetcd \
+      -w /go/src/github.com/jiachengxu/idetcd golang:1.10 go build -v -o coredns
 ```
 
 ## Reference

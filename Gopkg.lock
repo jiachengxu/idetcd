@@ -22,12 +22,11 @@
   version = "v1.17.0"
 
 [[projects]]
-  digest = "1:e64acfe8cda1955db545ede8e863c54d69f1ac6cd058df4349be4040320840fd"
+  digest = "1:eee9386329f4fcdf8d6c0def0c9771b634bdd5ba460d888aa98c17d59b37a76c"
   name = "github.com/apache/thrift"
   packages = ["lib/go/thrift"]
   pruneopts = "UT"
-  revision = "327ebb6c2b6df8bf075da02ef45a2a034e9b79ba"
-  version = "0.11.0"
+  revision = "e59b73d3c2bf1c328ccb78e683c0462fa1a473c7"
 
 [[projects]]
   digest = "1:b0396635e3e2b62d2ea29be70c05e43617be3ef4275f1869acf41a6eb52caf2c"
@@ -78,7 +77,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:82ae0371590886911d9566235a5ddd189a2d84ff1830b526c98af88f687f7d07"
+  digest = "1:7f61e7714148d6e762bdb65565f42daedad2b5dd2b91b2455060e3ef9408e42a"
   name = "github.com/coredns/coredns"
   packages = [
     "core",
@@ -153,7 +152,7 @@
     "test",
   ]
   pruneopts = "UT"
-  revision = "2b4878195c58a37df1e491cfb581523e6d4aa058"
+  revision = "9cea32f013739a17a07b096f117b6e5899006d3f"
 
 [[projects]]
   digest = "1:e1ba20b1e6f57a514c939b4157dfc33713e25363be66cd9989e5810b04e15253"
@@ -399,18 +398,17 @@
   version = "v1.0.1"
 
 [[projects]]
-  digest = "1:3507387f7b66a5e8c6df8de4c5ade771dca42fb48e7d48e7165ccc0b35add2d4"
+  digest = "1:c3dfad92b2bbcee39be846e16b72519a408a000bb70b88e8e789daf9d0179cea"
   name = "github.com/mholt/caddy"
   packages = [
     ".",
     "caddyfile",
     "onevent",
     "onevent/hook",
-    "telemetry",
   ]
   pruneopts = "UT"
-  revision = "1f7b5abc80679fb71ee0e04ed98cbe284b1fc181"
-  version = "v0.11.0"
+  revision = "2922d09bef3c504dde66bc12f7441668fcef6a20"
+  version = "v0.10.14"
 
 [[projects]]
   digest = "1:463e4140189f8194f9121ca1c7fe3b8e9e9a2ab3d949b43c835c21034927dc62"
@@ -559,11 +557,11 @@
   version = "v1.0.1"
 
 [[projects]]
-  digest = "1:7b36ba7867ad2d262abedeff4c9362f2e8aa00cf6dd3254a509f24c27eb1d5b7"
+  digest = "1:98e5cda86f67cd1ac95389d98670b66dea8cae480fe6292b83bccccfe60b4106"
   name = "github.com/ugorji/go"
   packages = ["codec"]
   pruneopts = "UT"
-  revision = "9c7f9b7a2bc3a520f7c7b30b34b7f85f47fe27b6"
+  revision = "f3cacc17c85ecb7f1b6a9e373ee85d1480919868"
 
 [[projects]]
   branch = "master"
@@ -600,14 +598,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:8742e6e73627b2877c3f723bc1823d5667ec59011242480309dc90fa862512aa"
+  digest = "1:4a7c38ff146e5002dda78fdf599ac143fd0c98ffba9fb9d1721c3ba7fcd356c0"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "bd9dbc187b6e1dacfdd2722a87e83093c2d7bd6e"
+  revision = "3dc4335d56c789b04b0ba99b7a37249d9b614314"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -701,8 +699,7 @@
   version = "v2.2.1"
 
 [[projects]]
-  branch = "master"
-  digest = "1:3b4f29485072d6af75536e5dd9d5480400e083a4ff685638d6793c27eab8dcd3"
+  digest = "1:74142cd2275f77547c35ac51514108d9798a09aa0cf377a5c1084718ef7aa225"
   name = "k8s.io/api"
   packages = [
     "admissionregistration/v1alpha1",
@@ -736,11 +733,10 @@
     "storage/v1beta1",
   ]
   pruneopts = "UT"
-  revision = "183f3326a9353bd6d41430fc80f96259331d029c"
+  revision = "072894a440bdee3a891dea811fe42902311cd2a3"
 
 [[projects]]
-  branch = "master"
-  digest = "1:92061a4d7ce7f1b420fe58e3724e023278eb8b3eaadab1f1aad17f830217ab7b"
+  digest = "1:3e5d6f34fefbb0169943b5a167de9b2443f695e436e96f9ba0f1050c29799250"
   name = "k8s.io/apimachinery"
   packages = [
     "pkg/api/errors",
@@ -771,7 +767,6 @@
     "pkg/util/framer",
     "pkg/util/intstr",
     "pkg/util/json",
-    "pkg/util/naming",
     "pkg/util/net",
     "pkg/util/runtime",
     "pkg/util/sets",
@@ -784,7 +779,7 @@
     "third_party/forked/golang/reflect",
   ]
   pruneopts = "UT"
-  revision = "cbafd24d5796966031ae904aa88e2436a619ae8a"
+  revision = "103fd098999dc9c0c88536f5c9ad2e5da39373ae"
 
 [[projects]]
   digest = "1:024b0daaffb52bdf38e25a76b315dbe8445158ff9136aaa7818a7ec6c807dbc6"
