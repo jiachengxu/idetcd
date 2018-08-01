@@ -13,6 +13,21 @@ In distributed TensorFlow, identifying the nodes without domain name collision i
 ![deploy](https://github.com/jiachengxu/idetcd/blob/master/fig/deploy.png)
 
 ## Usage
+
+### Syntax
+
+~~~
+idetcd {
+	endpoint ENDPOINT...
+	limit LIMIT
+	pattern PATTERN
+}
+~~~
+
+* `endpoint` **ENDPOINT** the etcd endpoints. Defaults to "http://localhost:2379".
+* `limit` **LIMIT** the maximum limit of the node number in the cluster, if some nodes is going to expose itself after the node number in the cluster hits this limit, it will fail.
+* `pattern` **PATTERN** the domain name pattern that every node follows in the cluster. And here we use golang template for the pattern.
+
 You can get this project by:
 ```
 $ go get -u github.com/jiachengxu/idetcd
