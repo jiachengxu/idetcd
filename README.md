@@ -67,5 +67,5 @@ Also ipv6 is supported:
 $ dig +short worker4.tf.local AAAA @localhost
 ```
 
-Reference
-[1](https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers)
+## Reference
+[[1]Dynamic RPC Address Resolution](https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers)
