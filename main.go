@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/coremain"
+	_ "github.com/coredns/coredns/plugin/whoami"
 	_ "github.com/jiachengxu/idetcd/idetcd"
 )
 
