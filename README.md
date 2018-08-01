@@ -7,7 +7,9 @@
 *idetcd* is a etcd-based [CoreDNS](https://coredns.io/) plugin used for identifying nodes in a cluster without domain name collsion.
 
 ## Motivation
-In distributed TensorFlow, identifying the nodes without domain name collision is a big [challenge](https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers). CoreDNS has a plugin-based architecture and it is a really lightweight, flexible and extandable DNS server which can easily enable custumized plugin. For solving this issue, we can set up the CoreDNS plus customized plugin on every node in the TensorFlow cluster, and using the plugin to write/read DNS records in a distributed key-value store, like zookeeper and etcd. This is what *idetcd* does.
+In distributed system, identifying nodes in the cluster is a big challenge. For tackling this problem, usually requiring some complicated protocols or additional DevOps, what's more, in most case it needs to customize configuration for every different node which requires lots of work and also adds some risks to manage the system. 
+
+In distributed TensorFlow, they also have some similar problems of identifying nodes[1]. In the older version of distributed TensorFlow, adding a node to the cluster is not easy. First of all you need to bring the whole system down, and then create a configuration for the new node, after that restart the whole system. It did requrie additional DevOps work and it's also not "friendly" for some machine learning lovers to set up their own distributed TensorFlow clusters. There are some approaches to solve this problems, for example, building some protocols on the top of current Tensorflow codebase, but it probably is not a good way since may need to change the structure of Tensorflow, and bring some unnecessary complexities. A more flexible way to do this is adding a spearate module like DNS server, and nodes expose itself through DNS. CoreDNS has a plugin-based architecture and it is a really lightweight, flexible and extandable DNS server which can easily enable custumized plugin. For solving this issue, we can set up the CoreDNS plus customized plugin on every node in the TensorFlow cluster, and using the plugin to write/read DNS records in a distributed key-value store, like zookeeper and etcd. This is what *idetcd* does.
 
 ## How it works
 ![deploy](https://github.com/jiachengxu/idetcd/blob/master/fig/deploy.png)
@@ -63,3 +65,6 @@ Also ipv6 is supported:
 ```
 $ dig +short worker4.tf.local AAAA @localhost
 ```
+
+Reference
+[1]((https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers)
