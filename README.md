@@ -13,6 +13,7 @@ In distributed TensorFlow, they also have some similar problems of identifying n
 
 ## How it works
 ![deploy](https://github.com/jiachengxu/idetcd/blob/master/fig/deploy.png)
+Before we start the cluster, we can set up CoreDNS server on every node in the cluster, for every node we just use the same configuration(See example for details), for example, the domain name pattern of this cluster, like worker{{.ID}}.tf.local. Then we start up all the nodes, at this moment all the nodes haven't exposed to other nodes. After that we start the CoreDNS server, and every node will try to find a free slot in the etcd. For example, node may first try to take worker1.tf.local., and then it will try to figure out if this domain name is already exist in the etcd, if the answer is yes, then the node will try to increase the id to 2 and look into etcd again, otherwise, it will just take the name, and write it to the etcd. In this way, every node can dynimiclly to find a domain name for it self without any collison. And also we don't need to customize configuration for every node, instead, we use same configuration and let the nodes to expose themselves!
 
 ## Usage
 
