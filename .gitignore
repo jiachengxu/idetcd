@@ -2,6 +2,7 @@ query.log
 Corefile
 *.swp
 coredns
+!coredns/
 coredns.exe
 coredns.exe~
 kubectl
