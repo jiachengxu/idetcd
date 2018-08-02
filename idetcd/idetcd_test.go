@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/plugin/proxy"
 	"github.com/coredns/coredns/plugin/test"
 	"github.com/coredns/coredns/request"
@@ -15,8 +16,47 @@ import (
 )
 
 var localIP = iP()
+var directives = []string{
+	"metadata",
+	"tls",
+	"reload",
+	"nsid",
+	"root",
+	"bind",
+	"debug",
+	"trace",
+	"health",
+	"pprof",
+	"prometheus",
+	"errors",
+	"log",
+	"dnstap",
+	"chaos",
+	"loadbalance",
+	"cache",
+	"rewrite",
+	"dnssec",
+	"autopath",
+	"template",
+	"hosts",
+	"route53",
+	"federation",
+	"kubernetes",
+	"file",
+	"auto",
+	"secondary",
+	"etcd",
+	"loop",
+	"forward",
+	"proxy",
+	"erratic",
+	"idetcd",
+	"whoami",
+	"on",
+}
 
 func TestBasicLookupNodesRR(t *testing.T) {
+	dnsserver.Directives = directives
 	corefiles := generateCorefiles(5)
 	var udps []string
 	var nodes []*caddy.Instance
@@ -45,6 +85,7 @@ func TestBasicLookupNodesRR(t *testing.T) {
 }
 
 func TestNodeUpAfterTTL(t *testing.T) {
+	dnsserver.Directives = directives
 	corefiles := generateCorefiles(5)
 	var udps []string
 	var nodes []*caddy.Instance
@@ -91,6 +132,7 @@ func TestNodeUpAfterTTL(t *testing.T) {
 }
 
 func TestNodeTakeFreeSlot(t *testing.T) {
+	dnsserver.Directives = directives
 	corefiles := generateCorefiles(5)
 	shutDownIdx := 1
 	var udps []string
