@@ -2,6 +2,8 @@
 package idetcd
 
 import (
+	"context"
+	"log"
 	"strconv"
 	"testing"
 	"time"
@@ -11,6 +13,7 @@ import (
 	"github.com/coredns/coredns/plugin/test"
 	"github.com/coredns/coredns/request"
 	te "github.com/coredns/coredns/test"
+	"github.com/coreos/etcd/clientv3"
 	"github.com/mholt/caddy"
 	"github.com/miekg/dns"
 )
@@ -81,7 +84,7 @@ func TestBasicLookupNodesRR(t *testing.T) {
 	for _, node := range nodes {
 		node.ShutdownCallbacks()
 	}
-	time.Sleep(30 * time.Second)
+	delete()
 }
 
 func TestNodeUpAfterTTL(t *testing.T) {
@@ -128,7 +131,7 @@ func TestNodeUpAfterTTL(t *testing.T) {
 	for _, node := range nodes {
 		node.ShutdownCallbacks()
 	}
-	time.Sleep(25 * time.Second)
+	delete()
 }
 
 func TestNodeTakeFreeSlot(t *testing.T) {
@@ -191,7 +194,7 @@ func TestNodeTakeFreeSlot(t *testing.T) {
 	for _, node := range nodes {
 		node.ShutdownCallbacks()
 	}
-	time.Sleep(20 * time.Second)
+	delete()
 }
 
 func checkAnswer(i int, state request.Request, p proxy.Proxy, t *testing.T) {
@@ -241,4 +244,16 @@ func generateCorefiles(numNode int) []string {
 		corefiles = append(corefiles, corefile)
 	}
 	return corefiles
+}
+
+func delete() {
+	cli, err := clientv3.New(clientv3.Config{
+		Endpoints: []string{defaultEndpoint},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cli.Close()
+	ctx := context.Background()
+	cli.Delete(ctx, "worker", clientv3.WithPrefix())
 }
