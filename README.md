@@ -26,7 +26,7 @@ Notice, at the starting time, all the nodes haven't exposed to other nodes. Then
 
 ### Syntax
 
-CoreDNS uses a configuration file called Corefile to specify the configuration, please go to [CoreDNS github repo](https://github.com/coredns/coredns) for more details. Here is a snippet for *idetcd* syntax:
+CoreDNS uses a configuration file called Corefile to specify the configuration, please go to [CoreDNS Github repo](https://github.com/coredns/coredns) for more details. Here is a snippet for *idetcd* syntax:
 
 ~~~
 idetcd {
@@ -41,7 +41,7 @@ idetcd {
 * `pattern` **PATTERN** the domain name pattern that every node follows in the cluster. And here we use golang template for the pattern.
 
 ### Example
-In following example, we are going to start up a cluster which contains 5 nodes, on every node we can get this project by:
+In the following example, we are going to start up a cluster which contains 5 nodes, on every node we can get this project by:
 
 ```
 $ go get -u github.com/jiachengxu/idetcd
@@ -49,7 +49,7 @@ $ go get -u github.com/jiachengxu/idetcd
 
 Before you move to the next step, make sure that you've **already set up a etcd instance**, and don't forget to write down the endpoints.
 
-Then you need to add a Corefile which specifys the configuration of the CoreDNS server in the same directory of `main.go`, an simple Corefile example is as follows, please go to [CoreDNS github repo](https://github.com/coredns/coredns) for more details.
+Then you need to add a Corefile which specifys the configuration of the CoreDNS server in the same directory of `main.go`, a simple Corefile example is as follows, please go to [CoreDNS Github repo](https://github.com/coredns/coredns) for more details.
 
  ~~~ corefile
  . {
@@ -77,7 +77,7 @@ Then run it by:
 $ ./coredns
 ```
 
-After that, all nodes in the cluster are trying to find free slots in the etcd to expose themselves, once they are successed, you can get the domain name of every node on every node in the same cluster by:
+After that, all nodes in the cluster are trying to find free slots in the etcd to expose themselves, once they succeed, you can get the domain name of every node on every node in the same cluster by:
 ```
 $ dig +short worker4.tf.local @localhost
 ```
