@@ -209,6 +209,21 @@ func checkAnswer(i int, state request.Request, p proxy.Proxy, t *testing.T) {
 		t.Errorf("Expected %s , got: %s", localIP, resp.Answer[0].(*dns.A).A.String())
 	}
 
+	//test for ipv6
+	resp, err = p.Lookup(state, "worker"+strconv.Itoa(i+1)+".tf.local.", dns.TypeAAAA)
+	if err != nil {
+		t.Fatalf("Expected to receive reply, but didn't: %v", err)
+	}
+	if len(resp.Answer) == 0 {
+		t.Fatalf("Expected to at least one RR in the answer section, got none")
+	}
+	if resp.Answer[0].Header().Rrtype != dns.TypeAAAA {
+		t.Errorf("Expected RR to AAAA, got: %d", resp.Answer[0].Header().Rrtype)
+	}
+	if resp.Answer[0].(*dns.AAAA).AAAA.String() != localIP.Ipv6 {
+		t.Errorf("Expected %s , got: %s", localIP, resp.Answer[0].(*dns.AAAA).AAAA.String())
+	}
+
 }
 
 func generateCorefiles(numNode int) []string {
