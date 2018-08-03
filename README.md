@@ -26,6 +26,8 @@ Notice, at the starting time, all the nodes haven't exposed to other nodes. Then
 
 ### Syntax
 
+CoreDNS uses a configuration file called Corefile to specify the configuration, please go to [CoreDNS github repo](https://github.com/coredns/coredns) for more details. Here is a snippet for *idetcd* syntax:
+
 ~~~
 idetcd {
 	endpoint ENDPOINT...
@@ -39,11 +41,13 @@ idetcd {
 * `pattern` **PATTERN** the domain name pattern that every node follows in the cluster. And here we use golang template for the pattern.
 
 ### Example
-In following example, we have a cluster which contains 5 nodes, on every node we can get this project by:
+In following example, we are going to start up a cluster which contains 5 nodes, on every node we can get this project by:
+
 ```
 $ go get -u github.com/jiachengxu/idetcd
 ```
-Before you move to the next step, make sure that you've already set up a etcd instance, and don't forget to write down the endpoints.
+
+Before you move to the next step, make sure that you've **already set up a etcd instance**, and don't forget to write down the endpoints.
 
 Then you need to add a Corefile which specifys the configuration of the CoreDNS server in the same directory of `main.go`, an simple Corefile example is as follows, please go to [CoreDNS github repo](https://github.com/coredns/coredns) for more details.
 
@@ -54,17 +58,22 @@ Then you need to add a Corefile which specifys the configuration of the CoreDNS 
          limit 10
          pattern worker{{.ID}}.tf.local.
      }
-     whoami
  }
  ~~~
 
 And then you can generate binary file by:
-```
+```sh
 $ go build -v -o coredns
 ```
 
-Then run it by:
+Alternatively, if you have docker installed, you could also execute the following to build:
+```sh
+$ docker run --rm -i -t -v $PWD:/go/src/github.com/jiachengxu/idetcd \
+      -w /go/src/github.com/jiachengxu/idetcd golang:1.10 go build -v -o coredns
 ```
+
+Then run it by:
+```sh
 $ ./coredns
 ```
 
@@ -77,11 +86,7 @@ Also ipv6 is supported:
 $ dig +short worker4.tf.local AAAA @localhost
 ```
 
-Alternatively, if you have docker installed, you could also execute the following to build:
-```sh
-$ docker run --rm -i -t -v $PWD:/go/src/github.com/jiachengxu/idetcd \
-      -w /go/src/github.com/jiachengxu/idetcd golang:1.10 go build -v -o coredns
-```
+
 
 ## Reference
 [[1]Dynamic RPC Address Resolution](https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers)  
