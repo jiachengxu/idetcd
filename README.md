@@ -17,8 +17,11 @@ CoreDNS has a plugin-based architecture and it is a really lightweight, flexible
 
 ## How it works
 ![deploy](https://github.com/jiachengxu/idetcd/blob/master/fig/deploy.png)
+The figure[[2]](https://github.com/jiachengxu/idetcd/blob/master/README.md#reference) above shows the scenario of how it works. The idea is quite simple: **Set up CoreDNS server on every node, and node exposes itself by take free domain name.**
 
-Before we start the cluster, we can set up CoreDNS server on every node in the cluster, for every node we just use the same configuration(See example for details), for example, the domain name pattern of this cluster, like worker{{.ID}}.tf.local. Then we start up all the nodes, at this moment all the nodes haven't exposed to other nodes. After that we start the CoreDNS server, and every node will try to find a free slot in the etcd. For example, node may first try to take worker1.tf.local., and then it will try to figure out if this domain name is already exist in the etcd, if the answer is yes, then the node will try to increase the id to 2 and look into etcd again, otherwise, it will just take the name, and write it to the etcd. In this way, every node can dynimiclly to find a domain name for it self without any collison. And also we don't need to customize configuration for every node, instead, we use same configuration and let the nodes to expose themselves!
+In details, before the cluster is started, we set up CoreDNS server on every node in the cluster, for every node we just use the same configuration(See [example] below for details)which specifys the domain name pattern of nodes in this cluster, like worker{{.ID}}.tf.local., the maxmuium number of node allowed in this cluster, and etcd endpoints. Then we just start up all the nodes. That's it! 
+
+Notice, at the starting time, all the nodes haven't exposed to other nodes. Then we just start CoreDNS server on every node, and every node will try to find a free slot in the etcd. For example, node may first try to take worker1.tf.local., and then it will try to figure out if this domain name is already exist in the etcd, if the answer is yes, then the node will try to increase the id to 2 and look into etcd again, otherwise, it will just take the name, and write it to the etcd. In this way, every node can dynimiclly find a domain name for itself without any collison. And also we don't need to customize configuration for every node, instead, we use same configuration and let the nodes to expose themselves!
 
 ## Usage
 
@@ -82,4 +85,5 @@ $ docker run --rm -i -t -v $PWD:/go/src/github.com/jiachengxu/idetcd \
 ```
 
 ## Reference
-[[1]Dynamic RPC Address Resolution](https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers)
+[[1]Dynamic RPC Address Resolution](https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers)  
+[[2]Lightning Talk: Scaling Distributed Deep Learning with Service Discovery: How CoreDNS Helps Distributed TensorFlow Tasks - Yong Tang, Infoblox Inc.](https://www.youtube.com/watch?v=WBAP91g7Yd0)
