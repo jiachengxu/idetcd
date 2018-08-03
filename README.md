@@ -57,7 +57,7 @@ Then you need to add a Corefile which specifys the configuration of the CoreDNS 
  . {
      idetcd {
          endpoint ETCDENDPOINTS
-         limit 10
+         limit 5
          pattern worker{{.ID}}.tf.local.
      }
  }
