@@ -20,14 +20,14 @@ func TestParseIdetcd(t *testing.T) {
 		{
 			`idetcd {
 				endpoint http://localhost:2379
-				pattern worker{{.ID}}.local.tf
+				pattern worker{{.ID}}.tf.local.
 				limit 5
 		}`, false, []string{"http://localhost:2379"}, 5, getExpectedPattern(), "",
 		},
 		{
 			`idetcd {
 				endpoint
-				pattern worker{{.ID}}.local.tf
+				pattern worker{{.ID}}.tf.local.
 				limit 5
 		}`, true, []string{"http://localhost:2379"}, 5, getExpectedPattern(), "",
 		},
@@ -41,21 +41,21 @@ func TestParseIdetcd(t *testing.T) {
 		{
 			`idetcd {
 				endpoint http://localhost:2379
-				pattern worker{{.ID}}.local.tf
+				pattern worker{{.ID}}.tf.local.
 				limit
 		}`, true, []string{"http://localhost:2379"}, 5, getExpectedPattern(), "",
 		},
 		{
 			`idetcd {
 				endpoint http://localhost:2379
-				pattern worker{{.ID}}.local.tf
+				pattern worker{{.ID}}.tf.local.
 				limit hello
 		}`, true, []string{"http://localhost:2379"}, 5, getExpectedPattern(), "",
 		},
 		{
 			`idetcd {
 				endpoint http://localhost:2379 http://localhost:3379 http://localhost:4379
-				pattern worker{{.ID}}.local.tf
+				pattern worker{{.ID}}.tf.local.
 				limit 5
 		}`, false, []string{"http://localhost:2379", "http://localhost:3379", "http://localhost:4379"}, 5, getExpectedPattern(), "",
 		},
@@ -95,7 +95,7 @@ func TestParseIdetcd(t *testing.T) {
 
 func getExpectedPattern() *template.Template {
 	pattern := template.New("idetcd")
-	pattern, err := pattern.Parse("worker{{.ID}}.local.tf")
+	pattern, err := pattern.Parse("worker{{.ID}}.tf.local.")
 	if err != nil {
 		return nil
 	}
@@ -105,7 +105,7 @@ func getExpectedPattern() *template.Template {
 func TestSetup(t *testing.T) {
 	config := `idetcd {
 			endpoint http://localhost:2379
-			pattern worker{{.ID}}.local.tf
+			pattern worker{{.ID}}.tf.local.
 			limit 5
 		}`
 	c := caddy.NewTestController("dns", config)
