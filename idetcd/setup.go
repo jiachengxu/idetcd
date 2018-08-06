@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"net"
 	"strconv"
 	"strings"
@@ -60,7 +59,6 @@ func setup(c *caddy.Controller) error {
 		return plugin.Error("idetcd", err)
 	}
 	value := string(localIP)
-	fmt.Printf("%v\n", value)
 	killChan = make(chan struct{})
 
 	//Try to find a free slot for current node
@@ -77,16 +75,11 @@ func setup(c *caddy.Controller) error {
 
 		if resp.Count == 0 {
 			//Can not find the proposed domain name in the etcd, so the node take this domain name, and put the record attached a lease with ttl in etcd.
-			lease, err := idetc.Client.Grant(context.TODO(), defaultTTL)
-			_, err = idetc.set(name, value, etcdcv3.WithLease(lease.ID))
-			if err != nil {
-				fmt.Println(err.Error())
-			}
-			fmt.Printf("set node %s with ip %s\n", name, value)
+			lease, _ := idetc.Client.Grant(context.TODO(), defaultTTL)
+			idetc.set(name, value, etcdcv3.WithLease(lease.ID))
 			break
 		} else {
 			//Node find the proposed domain name is already used by other node, so it increases the proposed id and try another domain name.
-			fmt.Printf("node %s is already exist!\n", name)
 			id++
 			namebuf.Reset()
 		}
@@ -114,7 +107,6 @@ func setup(c *caddy.Controller) error {
 				if string(resp.Kvs[0].Value) == value {
 					lease, _ := idetc.Client.Grant(context.TODO(), defaultTTL)
 					idetc.set(namebuf.String(), value, etcdcv3.WithLease(lease.ID))
-					fmt.Printf("Renew node %s with ip: %s\n", namebuf.String(), value)
 				}
 			case <-killChan:
 				namebuf.Reset()

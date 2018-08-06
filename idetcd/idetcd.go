@@ -4,7 +4,6 @@ package idetcd
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net"
 	"text/template"
 	"time"
@@ -44,16 +43,9 @@ func (idetcd *Idetcd) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns
 	a.SetReply(r)
 	a.Authoritative = true
 	qname := state.Name()
-	fmt.Println(qname)
 	resp, _ := idetcd.get(qname)
 	record := new(Record)
-
-	if err := json.Unmarshal(resp.Kvs[0].Value, record); err != nil {
-		//Not sure what to do here
-		return plugin.NextOrFailure(idetcd.Name(), idetcd.Next, ctx, w, r)
-	}
-
-	fmt.Printf("%v\n", record)
+	json.Unmarshal(resp.Kvs[0].Value, record)
 	var rr dns.RR
 	switch state.QType() {
 	case dns.TypeA:
