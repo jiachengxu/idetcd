@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net"
 	"strconv"
 	"strings"
@@ -52,6 +53,7 @@ func setup(c *caddy.Controller) error {
 	//get ipv4, ipv6 and port.
 	host := iP()
 	host.Port = dnsserver.GetConfig(c).Port
+	fmt.Println(host)
 
 	//put them in json format.
 	localIP, err := json.Marshal(host)

@@ -1,5 +1,4 @@
 query.log
-Corefile
 *.swp
 coredns
 !coredns/
