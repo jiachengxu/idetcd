@@ -87,9 +87,26 @@ Also ipv6 is supported:
 ```
 $ dig +short worker4.tf.local AAAA @localhost
 ```
+### Integration with AWS
+Using CoreDNS with idetcd plugin to config the cluster is a one-time process which is different with the general config process. For example, if you want to set up a cluster which contains several instances on AWS, you can use the same configuration for every instance and let all the instances to expose themselves in the `init` process. This can be achieved by using [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init) in [`user data`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html). Here is a bash script example to for instances to execute at launch:
 
-
-
+```bash
+#!/bin/bash
+set -x
+## Install docker.
+yum install -y docker
+echo
+chkconfig docker on
+service docker start
+echo
+## Install git.
+yum install -y git
+git clone https://github.com/jiachengxu/idetcd.git /home/ec2-user/idetcd
+cd /home/ec2-user/idetcd
+## Using docker to build the binary file of CoreDns with idetcd plugin specified.
+docker run --rm -v $PWD:/go/src/github.com/jiachengxu/idetcd -w /go/src/github.com/jiachengxu/idetcd golang:1.10 go build -v -o coredns
+./coredns
+```
 ## Reference
 [[1]Dynamic RPC Address Resolution](https://groups.google.com/a/tensorflow.org/forum/#!msg/developers/s8MJ2vqQ1z0/mWoVaAMvCwAJ;context-place=forum/developers)  
 [[2]Lightning Talk: Scaling Distributed Deep Learning with Service Discovery: How CoreDNS Helps Distributed TensorFlow Tasks - Yong Tang, Infoblox Inc.](https://www.youtube.com/watch?v=WBAP91g7Yd0)
