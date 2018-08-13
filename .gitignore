@@ -8,3 +8,4 @@ kubectl
 go-test-tmpfile*
 coverage.txt
 .idea
+Corefile

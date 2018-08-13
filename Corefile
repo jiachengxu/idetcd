@@ -1,7 +1,0 @@
-. {
-	idetcd {
-		endpoint http://localhost:2379
-		limit 5
-		pattern worker{{.ID}}.tf.local.
-	}
-}

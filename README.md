@@ -88,7 +88,7 @@ Also ipv6 is supported:
 $ dig +short worker4.tf.local AAAA @localhost
 ```
 ### Integration with AWS
-Using CoreDNS with idetcd plugin to config the cluster is a one-time process which is different with the general config process. For example, if you want to set up a cluster which contains several instances on AWS, you can use the same configuration for every instance and let all the instances to expose themselves in the `init` process. This can be achieved by using [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init) in [`user data`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html). Here is a bash script example to for instances to execute at launch:
+Using CoreDNS with idetcd plugin to config the cluster is a one-time process which is different with the general config process. For example, if you want to set up a cluster which contains several instances on AWS, you can use the same configuration for every instance and let all the instances to expose themselves in the `init` process. This can be achieved by using [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init) in [`user data`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html). Here is a bash script example for AWS instances to execute at launch:
 
 ```bash
 #!/bin/bash
