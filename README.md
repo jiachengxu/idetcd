@@ -105,6 +105,16 @@ git clone https://github.com/jiachengxu/idetcd.git /home/ec2-user/idetcd
 cd /home/ec2-user/idetcd
 ## Using docker to build the binary file of CoreDns with idetcd plugin specified.
 docker run --rm -v $PWD:/go/src/github.com/jiachengxu/idetcd -w /go/src/github.com/jiachengxu/idetcd golang:1.10 go build -v -o coredns
+## Create a Corefile for specifying the configuration of CoreDNS.(Don't forget to replace the ETCDENDPOINTS and NUMBER with your own etcd endpoints and limit of node in the cluster!)
+cat > Corefile << EOF
+. {
+    idetcd {
+        endpoint ETCDENDPOINTS
+        limit NUMBER
+        pattern worker{{.ID}}.tf.local.
+    }
+}
+EOF
 ./coredns
 ```
 ## Reference
