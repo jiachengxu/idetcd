@@ -4,7 +4,7 @@
 [![Code Coverage](https://img.shields.io/codecov/c/github/jiachengxu/idetcd/master.svg)](https://codecov.io/github/jiachengxu/idetcd?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jiachengxu/idetcd)](https://goreportcard.com/report/jiachengxu/idetcd)
 
-*idetcd* is a etcd-based [CoreDNS](https://coredns.io/) plugin used for identifying nodes in a cluster without domain name collision.  
+*idetcd* is an etcd-based [CoreDNS](https://coredns.io/) plugin used for identifying nodes in a cluster without domain name collision.  
 - *idetcd* uses same configuration on every node and asks nodes to dynamically config the cluster.  
 - *idetcd* can allow users easily take down/bring up new node without affecting other nodes in the cluster.
 
